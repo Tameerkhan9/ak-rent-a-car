@@ -4,10 +4,12 @@ services:
     runtime: node
     plan: free
     region: singapore
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: npx next start --hostname 0.0.0.0 --port $PORT
     healthCheckPath: /
     envVars:
+      - key: NODE_VERSION
+        value: 20.19.0
       - key: NODE_ENV
         value: production
       - key: MONGODB_URI
