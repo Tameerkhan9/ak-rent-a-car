@@ -76,9 +76,20 @@ export async function POST(request: Request) {
 
     return NextResponse.json(booking, { status: 201 });
   } catch (err) {
-    console.error(err);
+    console.error("Create booking failed:", err);
+    const message =
+      err instanceof Error ? err.message : "Could not create booking.";
+    const isMongo =
+      /mongo|ENOTFOUND|ECONNREFUSED|authentication|timed out|server selection/i.test(
+        message
+      );
     return NextResponse.json(
-      { error: "Could not create booking." },
+      {
+        error: isMongo
+          ? "Database connection failed. Check MongoDB settings on Render."
+          : "Could not create booking.",
+        detail: message,
+      },
       { status: 500 }
     );
   }

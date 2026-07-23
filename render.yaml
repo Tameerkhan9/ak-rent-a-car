@@ -14,6 +14,12 @@ services:
         value: production
       - key: MONGODB_URI
         sync: false
+      - key: MONGODB_USER
+        sync: false
+      - key: MONGODB_PASSWORD
+        sync: false
+      - key: MONGODB_HOST
+        value: cluster0.foxy10h.mongodb.net
       - key: MONGODB_DB
         value: ak_rent_a_car
       - key: GMAIL_USER
