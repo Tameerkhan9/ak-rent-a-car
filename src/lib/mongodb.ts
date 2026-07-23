@@ -1,6 +1,6 @@
 import { MongoClient, Db } from "mongodb";
 
-const uri = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI?.trim();
 
 declare global {
   // eslint-disable-next-line no-var
@@ -14,16 +14,16 @@ function getClientPromise() {
     );
   }
 
-  if (process.env.NODE_ENV === "development") {
-    if (!global._mongoClientPromise) {
-      const client = new MongoClient(uri);
-      global._mongoClientPromise = client.connect();
-    }
-    return global._mongoClientPromise;
-  }
+  const options = {
+    serverSelectionTimeoutMS: 8000,
+    connectTimeoutMS: 8000,
+  };
 
-  const client = new MongoClient(uri);
-  return client.connect();
+  if (!global._mongoClientPromise) {
+    const client = new MongoClient(uri, options);
+    global._mongoClientPromise = client.connect();
+  }
+  return global._mongoClientPromise;
 }
 
 export async function getDb(): Promise<Db> {
@@ -32,5 +32,5 @@ export async function getDb(): Promise<Db> {
 }
 
 export function hasMongoUri() {
-  return Boolean(process.env.MONGODB_URI?.trim());
+  return Boolean(uri);
 }

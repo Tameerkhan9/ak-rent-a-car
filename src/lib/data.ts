@@ -230,12 +230,17 @@ export async function getVehicles(): Promise<Vehicle[]> {
   if (!hasMongoUri()) {
     return readJson<Vehicle[]>(vehiclesPath, defaultVehicles);
   }
-  await ensureVehiclesSeeded();
-  const db = await getDb();
-  return db
-    .collection<Vehicle>("vehicles")
-    .find({}, { projection: { _id: 0 } })
-    .toArray();
+  try {
+    await ensureVehiclesSeeded();
+    const db = await getDb();
+    return db
+      .collection<Vehicle>("vehicles")
+      .find({}, { projection: { _id: 0 } })
+      .toArray();
+  } catch (error) {
+    console.error("MongoDB getVehicles failed, using defaults:", error);
+    return defaultVehicles;
+  }
 }
 
 export async function getVehicleById(id: string): Promise<Vehicle | undefined> {
