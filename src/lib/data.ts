@@ -248,12 +248,17 @@ export async function getVehicleById(id: string): Promise<Vehicle | undefined> {
     const vehicles = await getVehicles();
     return vehicles.find((v) => v.id === id);
   }
-  await ensureVehiclesSeeded();
-  const db = await getDb();
-  const vehicle = await db
-    .collection<Vehicle>("vehicles")
-    .findOne({ id }, { projection: { _id: 0 } });
-  return vehicle ?? undefined;
+  try {
+    await ensureVehiclesSeeded();
+    const db = await getDb();
+    const vehicle = await db
+      .collection<Vehicle>("vehicles")
+      .findOne({ id }, { projection: { _id: 0 } });
+    return vehicle ?? defaultVehicles.find((v) => v.id === id);
+  } catch (error) {
+    console.error("MongoDB getVehicleById failed, using defaults:", error);
+    return defaultVehicles.find((v) => v.id === id);
+  }
 }
 
 export async function saveVehicle(

@@ -14,14 +14,17 @@ function getClientPromise() {
     );
   }
 
-  const options = {
-    serverSelectionTimeoutMS: 8000,
-    connectTimeoutMS: 8000,
-  };
-
   if (!global._mongoClientPromise) {
-    const client = new MongoClient(uri, options);
-    global._mongoClientPromise = client.connect();
+    const client = new MongoClient(uri, {
+      serverSelectionTimeoutMS: 8000,
+      connectTimeoutMS: 8000,
+      // Avoid IPv6 DNS issues on some hosts (incl. Render)
+      family: 4,
+    });
+    global._mongoClientPromise = client.connect().catch((error) => {
+      global._mongoClientPromise = undefined;
+      throw error;
+    });
   }
   return global._mongoClientPromise;
 }
