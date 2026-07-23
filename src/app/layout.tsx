@@ -24,6 +24,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Fleet/admin pages read MongoDB at request time — do not prerender at build.
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({
   children,
 }: Readonly<{
