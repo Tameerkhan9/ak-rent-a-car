@@ -17,6 +17,9 @@ export async function sendBookingEmail(booking: Booking) {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: { user, pass },
+    connectionTimeout: 8000,
+    greetingTimeout: 8000,
+    socketTimeout: 8000,
   });
 
   const subject = `New booking: ${booking.vehicleName} — ${booking.customerName}`;

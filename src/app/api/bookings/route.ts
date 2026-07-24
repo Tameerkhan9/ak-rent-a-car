@@ -68,11 +68,10 @@ export async function POST(request: Request) {
       notes: notes || "",
     });
 
-    try {
-      await sendBookingEmail(booking);
-    } catch (err) {
+    // Don't block booking success on slow/failing Gmail SMTP
+    void sendBookingEmail(booking).catch((err) => {
       console.error("Failed to send booking email:", err);
-    }
+    });
 
     return NextResponse.json(booking, { status: 201 });
   } catch (err) {
