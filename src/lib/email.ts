@@ -1,27 +1,7 @@
 import nodemailer from "nodemailer";
 import type { Booking } from "./types";
 
-export async function sendBookingEmail(booking: Booking) {
-  const user = process.env.GMAIL_USER?.trim();
-  // App passwords are often pasted with spaces — Gmail accepts both, strip to be safe
-  const pass = process.env.GMAIL_APP_PASSWORD?.replace(/\s+/g, "");
-  const to = process.env.NOTIFY_EMAIL?.trim() || user;
-
-  if (!user || !pass || !to) {
-    console.warn(
-      "Email skipped: set GMAIL_USER, GMAIL_APP_PASSWORD, and optionally NOTIFY_EMAIL in .env.local"
-    );
-    return { sent: false as const, reason: "missing_credentials" };
-  }
-
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: { user, pass },
-    connectionTimeout: 8000,
-    greetingTimeout: 8000,
-    socketTimeout: 8000,
-  });
-
+function bookingContent(booking: Booking) {
   const subject = `New booking: ${booking.vehicleName} — ${booking.customerName}`;
   const text = `
 New vehicle booking received
@@ -59,6 +39,69 @@ Booking ID: ${booking.id}
     </div>
   `;
 
+  return { subject, text, html };
+}
+
+/** Resend uses HTTPS — works on Render Free (SMTP ports are blocked there). */
+async function sendWithResend(booking: Booking) {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const to =
+    process.env.NOTIFY_EMAIL?.trim() ||
+    process.env.GMAIL_USER?.trim() ||
+    process.env.RESEND_TO?.trim();
+
+  if (!apiKey || !to) {
+    return { sent: false as const, reason: "missing_resend" as const };
+  }
+
+  const { subject, text, html } = bookingContent(booking);
+  const from =
+    process.env.RESEND_FROM?.trim() || "AK Rent A Car <onboarding@resend.dev>";
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from,
+      to: [to],
+      reply_to: booking.customerEmail,
+      subject,
+      text,
+      html,
+    }),
+  });
+
+  if (!res.ok) {
+    const detail = await res.text();
+    throw new Error(`Resend failed (${res.status}): ${detail}`);
+  }
+
+  return { sent: true as const, provider: "resend" as const };
+}
+
+/** Gmail SMTP — works locally / paid Render. Blocked on Render Free. */
+async function sendWithGmailSmtp(booking: Booking) {
+  const user = process.env.GMAIL_USER?.trim();
+  const pass = process.env.GMAIL_APP_PASSWORD?.replace(/\s+/g, "");
+  const to = process.env.NOTIFY_EMAIL?.trim() || user;
+
+  if (!user || !pass || !to) {
+    return { sent: false as const, reason: "missing_gmail" as const };
+  }
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: { user, pass },
+    connectionTimeout: 8000,
+    greetingTimeout: 8000,
+    socketTimeout: 8000,
+  });
+
+  const { subject, text, html } = bookingContent(booking);
+
   await transporter.sendMail({
     from: `"AK Rent A Car & Tourism" <${user}>`,
     to,
@@ -68,5 +111,24 @@ Booking ID: ${booking.id}
     html,
   });
 
-  return { sent: true as const };
+  return { sent: true as const, provider: "gmail_smtp" as const };
+}
+
+export async function sendBookingEmail(booking: Booking) {
+  // Prefer Resend on production hosts where SMTP is blocked (Render Free).
+  if (process.env.RESEND_API_KEY?.trim()) {
+    return sendWithResend(booking);
+  }
+
+  const smtp = await sendWithGmailSmtp(booking);
+  if (smtp.sent || smtp.reason === "missing_gmail") {
+    if (!smtp.sent) {
+      console.warn(
+        "Email skipped: set RESEND_API_KEY (recommended on Render Free) or GMAIL_USER + GMAIL_APP_PASSWORD"
+      );
+    }
+    return smtp;
+  }
+
+  return smtp;
 }
