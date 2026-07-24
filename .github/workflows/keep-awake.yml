@@ -1,0 +1,17 @@
+name: Keep Render Awake
+
+on:
+  schedule:
+    # Every 10 minutes — prevents Render Free 15-min sleep
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping health endpoint
+        run: |
+          curl -fsS --max-time 90 \
+            "https://ak-rent-a-car.onrender.com/api/health" \
+            || echo "Ping failed (service may be cold-starting)"
