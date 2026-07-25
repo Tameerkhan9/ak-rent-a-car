@@ -73,14 +73,14 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="border-t border-white/10">
-          <div className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-5 text-xs text-steel/80 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-1 px-6 py-5 text-center text-xs text-steel/80 sm:flex-row sm:gap-4">
             <p>
               Developed by{" "}
               <span className="text-fog/90">Tameer Khan</span>
               {" — "}
               websites &amp; apps
             </p>
-            <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
               <a
                 href="mailto:tameerkhan0009@gmail.com"
                 className="hover:text-copper"
