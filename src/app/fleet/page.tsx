@@ -5,7 +5,7 @@ import { getVehicles } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 
-const HERO_IDS = ["v1", "v8", "v5", "v6", "v10", "v2", "v9", "v7", "v3", "v11"];
+const HERO_IDS = ["v1", "v8", "v5", "v6", "v10", "v2"];
 
 export default async function FleetPage() {
   const vehicles = await getVehicles();
