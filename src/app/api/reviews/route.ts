@@ -3,6 +3,7 @@ import {
   createReview,
   getApprovedReviews,
   getReviews,
+  toPublicReview,
 } from "@/lib/data";
 import { isAuthenticated } from "@/lib/auth";
 
@@ -14,9 +15,11 @@ export async function GET(request: Request) {
     if (!(await isAuthenticated())) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    // Full records (phone, booking id) only for authenticated admin
     return NextResponse.json(await getReviews());
   }
 
+  // Public: name + review only
   return NextResponse.json(await getApprovedReviews());
 }
 
@@ -42,9 +45,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       {
-        review,
-        message:
-          "Thanks! Your review was submitted and will appear after approval.",
+        review: toPublicReview(review),
+        message: "Thanks! Your review is now visible to other customers.",
       },
       { status: 201 }
     );

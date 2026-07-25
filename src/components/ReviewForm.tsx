@@ -1,9 +1,11 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { Vehicle } from "@/lib/types";
 
 export function ReviewForm({ vehicles }: { vehicles: Vehicle[] }) {
+  const router = useRouter();
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [vehicleId, setVehicleId] = useState(vehicles[0]?.id ?? "");
@@ -38,10 +40,11 @@ export function ReviewForm({ vehicles }: { vehicles: Vehicle[] }) {
       }
       setSuccess(
         data.message ||
-          "Thanks! Your review was submitted and will appear after approval."
+          "Thanks! Your review is now visible to other customers."
       );
       setComment("");
       setRating(5);
+      router.refresh();
     } catch {
       setError("Network error. Please try again.");
     } finally {
@@ -60,7 +63,8 @@ export function ReviewForm({ vehicles }: { vehicles: Vehicle[] }) {
         </h3>
         <p className="mt-2 text-sm text-steel">
           Available when your booking status is{" "}
-          <span className="text-fog">completed</span> (car returned).
+          <span className="text-fog">completed</span> (car returned). Only your
+          name and review are shown publicly.
         </p>
       </div>
 

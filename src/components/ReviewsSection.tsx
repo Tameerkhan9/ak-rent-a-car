@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Review } from "@/lib/types";
+import type { PublicReview } from "@/lib/types";
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -15,7 +15,7 @@ export function ReviewsSection({
   showFormLink = true,
   compact = false,
 }: {
-  reviews: Review[];
+  reviews: PublicReview[];
   showFormLink?: boolean;
   compact?: boolean;
 }) {
@@ -54,8 +54,8 @@ export function ReviewsSection({
 
       {reviews.length === 0 ? (
         <p className="mt-10 border border-dashed border-white/15 px-6 py-12 text-center text-steel">
-          No public reviews yet. After your rental is completed, you can leave
-          the first one.
+          No reviews yet. After your rental is completed, you can leave the
+          first one.
         </p>
       ) : (
         <div
@@ -70,10 +70,9 @@ export function ReviewsSection({
               <p className="mt-4 text-fog/90 leading-relaxed">
                 “{review.comment}”
               </p>
-              <div className="mt-5 flex flex-wrap items-center justify-between gap-2 text-sm">
-                <p className="font-semibold text-white">{review.customerName}</p>
-                <p className="text-steel">{review.vehicleName}</p>
-              </div>
+              <p className="mt-5 text-sm font-semibold text-white">
+                {review.customerName}
+              </p>
             </article>
           ))}
         </div>

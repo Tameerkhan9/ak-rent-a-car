@@ -51,3 +51,12 @@ export interface Review {
   status: ReviewStatus;
   createdAt: string;
 }
+
+/** Safe fields for the public website — no phone or booking credentials */
+export interface PublicReview {
+  id: string;
+  customerName: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+}

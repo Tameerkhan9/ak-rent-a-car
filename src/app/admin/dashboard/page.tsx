@@ -142,7 +142,7 @@ export default async function DashboardPage() {
             >
               <p className="font-semibold text-white">Manage reviews</p>
               <p className="mt-1 text-sm text-steel">
-                Approve or remove customer feedback
+                See customer phone & hide or remove feedback
               </p>
             </Link>
             <Link

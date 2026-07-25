@@ -1,7 +1,13 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
-import type { Booking, Review, ReviewStatus, Vehicle } from "./types";
+import type {
+  Booking,
+  PublicReview,
+  Review,
+  ReviewStatus,
+  Vehicle,
+} from "./types";
 import { getDb, hasMongoUri } from "./mongodb";
 
 const dataDir = path.join(process.cwd(), "data");
@@ -418,9 +424,21 @@ export async function getReviews(): Promise<Review[]> {
     .toArray();
 }
 
-export async function getApprovedReviews(): Promise<Review[]> {
+export function toPublicReview(review: Review): PublicReview {
+  return {
+    id: review.id,
+    customerName: review.customerName,
+    rating: review.rating,
+    comment: review.comment,
+    createdAt: review.createdAt,
+  };
+}
+
+export async function getApprovedReviews(): Promise<PublicReview[]> {
   const reviews = await getReviews();
-  return reviews.filter((r) => r.status === "approved");
+  return reviews
+    .filter((r) => r.status === "approved")
+    .map(toPublicReview);
 }
 
 export async function getReviewByBookingId(
@@ -490,7 +508,7 @@ export async function createReview(input: {
     customerPhone: input.customerPhone.trim(),
     rating,
     comment,
-    status: "pending",
+    status: "approved",
     createdAt: new Date().toISOString(),
   };
 

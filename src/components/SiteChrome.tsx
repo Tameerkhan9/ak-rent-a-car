@@ -96,6 +96,14 @@ export function SiteFooter() {
                 WhatsApp +923478226649
               </a>
             </p>
+            <p>
+              <a
+                href="mailto:tameerkhan0009@gmail.com"
+                className="hover:text-copper"
+              >
+                tameerkhan0009@gmail.com
+              </a>
+            </p>
           </div>
         </div>
       </footer>

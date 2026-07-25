@@ -16,14 +16,15 @@ export default async function AdminReviewsPage() {
   return (
     <AdminShell
       title="Reviews"
-      subtitle="Approve customer feedback before it appears on the website."
+      subtitle="Full customer details stay here. The website only shows name and review."
     >
       <p className="mb-6 text-sm text-steel">
         {pending > 0
-          ? `${pending} review${pending === 1 ? "" : "s"} waiting for approval.`
-          : "No pending reviews."}{" "}
+          ? `${pending} review${pending === 1 ? "" : "s"} marked pending.`
+          : "New reviews go live for customers automatically."}{" "}
         Tip: mark a booking as <span className="text-fog">completed</span> after
-        the car is returned so the customer can submit a review.
+        the car is returned so the customer can submit a review. Use Reject to
+        hide a review from the site.
       </p>
 
       {reviews.length === 0 ? (
@@ -43,7 +44,10 @@ export default async function AdminReviewsPage() {
                     {r.vehicleName}
                   </h2>
                   <p className="mt-1 text-sm text-steel">
-                    {r.customerName} · {r.customerPhone} ·{" "}
+                    <span className="text-fog">{r.customerName}</span>
+                    {" · "}
+                    <span className="text-fog">{r.customerPhone}</span>
+                    {" · "}
                     {new Date(r.createdAt).toLocaleString()}
                   </p>
                 </div>
