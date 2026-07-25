@@ -137,6 +137,15 @@ export default async function DashboardPage() {
               </p>
             </Link>
             <Link
+              href="/admin/reviews"
+              className="block border border-white/10 bg-black/20 px-4 py-4 transition hover:border-copper/50"
+            >
+              <p className="font-semibold text-white">Manage reviews</p>
+              <p className="mt-1 text-sm text-steel">
+                Approve or remove customer feedback
+              </p>
+            </Link>
+            <Link
               href="/fleet"
               className="block border border-white/10 bg-black/20 px-4 py-4 transition hover:border-copper/50"
             >

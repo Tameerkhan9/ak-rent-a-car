@@ -19,6 +19,9 @@ export function SiteHeader() {
           <Link href="/faq" className="hidden transition hover:text-white sm:inline">
             FAQ
           </Link>
+          <Link href="/reviews" className="hidden transition hover:text-white sm:inline">
+            Reviews
+          </Link>
           <a href="/#contact" className="transition hover:text-white">
             Contact
           </a>
@@ -60,6 +63,9 @@ export function SiteFooter() {
             </Link>
             <Link href="/faq" className="hover:text-fog">
               FAQ
+            </Link>
+            <Link href="/reviews" className="hover:text-fog">
+              Reviews
             </Link>
             <Link href="/terms" className="hover:text-fog">
               Terms

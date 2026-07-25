@@ -36,3 +36,18 @@ export interface Booking {
   notes?: string;
   createdAt: string;
 }
+
+export type ReviewStatus = "pending" | "approved" | "rejected";
+
+export interface Review {
+  id: string;
+  bookingId: string;
+  vehicleId: string;
+  vehicleName: string;
+  customerName: string;
+  customerPhone: string;
+  rating: number;
+  comment: string;
+  status: ReviewStatus;
+  createdAt: string;
+}

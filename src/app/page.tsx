@@ -1,13 +1,18 @@
 import Link from "next/link";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
-import { getVehicles } from "@/lib/data";
+import { getApprovedReviews, getVehicles } from "@/lib/data";
 import { VehicleCard } from "@/components/VehicleCard";
 import { ContactDetails } from "@/components/ContactDetails";
+import { ReviewsSection } from "@/components/ReviewsSection";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const vehicles = (await getVehicles()).filter((v) => v.available);
+  const [allVehicles, reviews] = await Promise.all([
+    getVehicles(),
+    getApprovedReviews(),
+  ]);
+  const vehicles = allVehicles.filter((v) => v.available);
 
   return (
     <div className="site-noise min-h-screen">
@@ -113,6 +118,8 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      <ReviewsSection reviews={reviews.slice(0, 4)} />
 
       <section id="contact" className="mx-auto max-w-6xl px-6 py-20">
         <p className="text-xs uppercase tracking-[0.25em] text-copper">

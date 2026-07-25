@@ -1,12 +1,18 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
-import type { Booking, Vehicle } from "./types";
+import type { Booking, Review, ReviewStatus, Vehicle } from "./types";
 import { getDb, hasMongoUri } from "./mongodb";
 
 const dataDir = path.join(process.cwd(), "data");
 const vehiclesPath = path.join(dataDir, "vehicles.json");
 const bookingsPath = path.join(dataDir, "bookings.json");
+const reviewsPath = path.join(dataDir, "reviews.json");
+
+function normalizePhone(phone: string) {
+  const digits = phone.replace(/\D/g, "");
+  return digits.slice(-10);
+}
 
 export const defaultVehicles: Vehicle[] = [
   {
@@ -205,6 +211,11 @@ async function ensureDataFiles() {
   } catch {
     await fs.writeFile(bookingsPath, JSON.stringify([], null, 2));
   }
+  try {
+    await fs.access(reviewsPath);
+  } catch {
+    await fs.writeFile(reviewsPath, JSON.stringify([], null, 2));
+  }
 }
 
 async function readJson<T>(filePath: string, fallback: T): Promise<T> {
@@ -388,4 +399,145 @@ export function calcDays(pickupDate: string, returnDate: string): number {
   const ms = end.getTime() - start.getTime();
   const days = Math.ceil(ms / (1000 * 60 * 60 * 24));
   return Math.max(days, 1);
+}
+
+/* ---------------- Reviews ---------------- */
+
+export async function getReviews(): Promise<Review[]> {
+  if (!hasMongoUri()) {
+    const reviews = await readJson<Review[]>(reviewsPath, []);
+    return reviews.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  }
+  const db = await getDb();
+  return db
+    .collection<Review>("reviews")
+    .find({}, { projection: { _id: 0 } })
+    .sort({ createdAt: -1 })
+    .toArray();
+}
+
+export async function getApprovedReviews(): Promise<Review[]> {
+  const reviews = await getReviews();
+  return reviews.filter((r) => r.status === "approved");
+}
+
+export async function getReviewByBookingId(
+  bookingId: string
+): Promise<Review | undefined> {
+  if (!hasMongoUri()) {
+    const reviews = await getReviews();
+    return reviews.find((r) => r.bookingId === bookingId);
+  }
+  const db = await getDb();
+  const review = await db
+    .collection<Review>("reviews")
+    .findOne({ bookingId }, { projection: { _id: 0 } });
+  return review ?? undefined;
+}
+
+export async function createReview(input: {
+  customerName: string;
+  customerPhone: string;
+  vehicleId: string;
+  rating: number;
+  comment: string;
+}): Promise<Review> {
+  const rating = Math.round(input.rating);
+  if (rating < 1 || rating > 5) {
+    throw new Error("Rating must be between 1 and 5.");
+  }
+  const comment = input.comment.trim();
+  if (comment.length < 10) {
+    throw new Error("Please write a short review (at least 10 characters).");
+  }
+
+  const vehicle = await getVehicleById(input.vehicleId);
+  if (!vehicle) throw new Error("Vehicle not found.");
+
+  const phoneKey = normalizePhone(input.customerPhone);
+  if (phoneKey.length < 10) {
+    throw new Error("Please enter a valid phone number.");
+  }
+
+  const bookings = await getBookings();
+  const completed = bookings.filter(
+    (b) =>
+      b.status === "completed" &&
+      b.vehicleId === input.vehicleId &&
+      normalizePhone(b.customerPhone) === phoneKey
+  );
+
+  if (completed.length === 0) {
+    throw new Error(
+      "Review is only available after your booking is completed (car returned). Ask the office to mark your booking completed, then try again."
+    );
+  }
+
+  const booking = completed[0];
+  const existing = await getReviewByBookingId(booking.id);
+  if (existing) {
+    throw new Error("You already submitted a review for this booking.");
+  }
+
+  const review: Review = {
+    id: uuidv4(),
+    bookingId: booking.id,
+    vehicleId: vehicle.id,
+    vehicleName: `${vehicle.year} ${vehicle.color} ${vehicle.brand} ${vehicle.name}`,
+    customerName: input.customerName.trim() || booking.customerName,
+    customerPhone: input.customerPhone.trim(),
+    rating,
+    comment,
+    status: "pending",
+    createdAt: new Date().toISOString(),
+  };
+
+  if (!hasMongoUri()) {
+    const reviews = await getReviews();
+    reviews.unshift(review);
+    await writeJson(reviewsPath, reviews);
+    return review;
+  }
+
+  const db = await getDb();
+  await db.collection("reviews").insertOne(review);
+  return review;
+}
+
+export async function updateReviewStatus(
+  id: string,
+  status: ReviewStatus
+): Promise<Review> {
+  if (!hasMongoUri()) {
+    const reviews = await getReviews();
+    const index = reviews.findIndex((r) => r.id === id);
+    if (index === -1) throw new Error("Review not found");
+    reviews[index] = { ...reviews[index], status };
+    await writeJson(reviewsPath, reviews);
+    return reviews[index];
+  }
+
+  const db = await getDb();
+  const result = await db.collection<Review>("reviews").findOneAndUpdate(
+    { id },
+    { $set: { status } },
+    { returnDocument: "after", projection: { _id: 0 } }
+  );
+  if (!result) throw new Error("Review not found");
+  return result;
+}
+
+export async function deleteReview(id: string): Promise<void> {
+  if (!hasMongoUri()) {
+    const reviews = await getReviews();
+    await writeJson(
+      reviewsPath,
+      reviews.filter((r) => r.id !== id)
+    );
+    return;
+  }
+  const db = await getDb();
+  await db.collection("reviews").deleteOne({ id });
 }
