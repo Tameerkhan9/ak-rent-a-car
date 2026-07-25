@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BookingForm } from "@/components/BookingForm";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
+import { VehiclePhotoGallery } from "@/components/VehiclePhotoGallery";
 import { getVehicleById } from "@/lib/data";
 import { formatPKR } from "@/lib/format";
 
@@ -14,6 +15,10 @@ export default async function BookPage({
   const vehicle = await getVehicleById(id);
   if (!vehicle) notFound();
 
+  const gallery = vehicle.images?.length
+    ? vehicle.images
+    : [vehicle.image];
+
   return (
     <div className="site-noise min-h-screen">
       <SiteHeader />
@@ -24,14 +29,10 @@ export default async function BookPage({
 
         <div className="mt-8 grid gap-10 lg:grid-cols-2">
           <div>
-            <div className="aspect-[16/11] overflow-hidden bg-ink-soft">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={vehicle.image}
-                alt={`${vehicle.year} ${vehicle.color} ${vehicle.brand} ${vehicle.name}`}
-                className="h-full w-full object-cover"
-              />
-            </div>
+            <VehiclePhotoGallery
+              alt={`${vehicle.year} ${vehicle.color} ${vehicle.brand} ${vehicle.name}`}
+              images={gallery}
+            />
             <p className="mt-6 text-xs uppercase tracking-[0.2em] text-copper">
               {vehicle.year} · {vehicle.color} · {vehicle.category}
             </p>

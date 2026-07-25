@@ -84,10 +84,18 @@ export const defaultVehicles: Vehicle[] = [
     transmission: "automatic",
     fuel: "Diesel",
     pricePerDay: 17000,
-    image: "/vehicles/vigo-2009-silver.png",
+    image: "/vehicles/vigo-2009-silver-hamer.png",
+    images: [
+      "/vehicles/hilux-vigo-2009/photo-4.png",
+      "/vehicles/hilux-vigo-2009/photo-6.png",
+      "/vehicles/hilux-vigo-2009/photo-5.png",
+      "/vehicles/hilux-vigo-2009/photo-3.png",
+      "/vehicles/hilux-vigo-2009/photo-2.png",
+      "/vehicles/hilux-vigo-2009/photo-1.png",
+    ],
     available: true,
     description:
-      "2009 silver Toyota Hilux Vigo — strong pickup for hills, cargo, and rough roads.",
+      "2009 silver Toyota Hilux Vigo — freshly upgraded with Hamer heavy-duty front bull bar and matching Hamer rear bumper, plus sports bar / roll cage, TRD Sportivo styling, side steps, and alloy wheels. Ready for hills, cargo, and tough roads.",
   },
   {
     id: "v7",

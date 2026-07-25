@@ -12,6 +12,8 @@ export interface Vehicle {
   fuel: string;
   pricePerDay: number;
   image: string;
+  /** Optional extra photos shown on the booking page */
+  images?: string[];
   available: boolean;
   description: string;
 }
