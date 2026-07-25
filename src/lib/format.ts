@@ -12,10 +12,7 @@ export const BUSINESS_LOCATION =
 
 export const BUSINESS_EMAIL = "akrentacar19@gmail.com";
 
-export const BUSINESS_EMAILS = [
-  "akrentacar19@gmail.com",
-  "tameerkhan0009@gmail.com",
-] as const;
+export const BUSINESS_EMAILS = ["akrentacar19@gmail.com"] as const;
 
 export const CONTACTS = [
   {

@@ -80,16 +80,7 @@ export function SiteFooter() {
               {" — "}
               websites &amp; apps
             </p>
-            <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
-              <a
-                href="mailto:tameerkhan0009@gmail.com"
-                className="hover:text-copper"
-              >
-                tameerkhan0009@gmail.com
-              </a>
-              <span className="text-white/20" aria-hidden>
-                ·
-              </span>
+            <p>
               <a
                 href="https://wa.me/923478226649"
                 target="_blank"
