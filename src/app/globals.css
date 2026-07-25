@@ -111,3 +111,35 @@ a {
     radial-gradient(ellipse 50% 35% at 100% 0%, rgba(255, 255, 255, 0.04), transparent),
     linear-gradient(180deg, #070707 0%, #101010 100%);
 }
+
+.fleet-cinema-slide {
+  opacity: 0;
+  transition: opacity 1.4s ease-in-out;
+}
+
+.fleet-cinema-slide.is-active {
+  opacity: 1;
+}
+
+.fleet-cinema-slide.is-active .fleet-cinema-img {
+  animation: fleet-ken 5.2s ease-out both;
+}
+
+@keyframes fleet-ken {
+  from {
+    transform: scale(1.12) translate3d(-1.5%, 0, 0);
+  }
+  to {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fleet-cinema-slide {
+    transition: none;
+  }
+
+  .fleet-cinema-slide.is-active .fleet-cinema-img {
+    animation: none;
+  }
+}
