@@ -92,7 +92,7 @@ export const defaultVehicles: Vehicle[] = [
     ],
     available: true,
     description:
-      "2009 silver Toyota Hilux Vigo — upgraded with Hamer heavy-duty front bull bar (HAMER branding) and matching Hamer rear bumper, open empty dala for cargo, side steps, and alloy wheels. Ready for hills, load work, and tough roads.",
+      "2009 silver Toyota Hilux Vigo — upgraded with Hamer heavy-duty front bull bar (HAMER branding top and bottom), matching Hamer rear bumper, black sports bar / bed grill on the dala, side steps, and alloy wheels. Ready for hills, load work, and tough roads.",
   },
   {
     id: "v7",
