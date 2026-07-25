@@ -91,12 +91,12 @@ export function SiteFooter() {
                 ·
               </span>
               <a
-                href="https://wa.me/923174149991"
+                href="https://wa.me/923478226649"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-copper"
               >
-                WhatsApp 0317 4149991
+                WhatsApp +923478226649
               </a>
             </p>
           </div>
