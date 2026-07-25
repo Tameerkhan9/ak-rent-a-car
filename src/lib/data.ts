@@ -86,12 +86,9 @@ export const defaultVehicles: Vehicle[] = [
     pricePerDay: 17000,
     image: "/vehicles/vigo-2009-silver-hamer.png",
     images: [
-      "/vehicles/hilux-vigo-2009/photo-4.png",
-      "/vehicles/hilux-vigo-2009/photo-6.png",
-      "/vehicles/hilux-vigo-2009/photo-5.png",
-      "/vehicles/hilux-vigo-2009/photo-3.png",
-      "/vehicles/hilux-vigo-2009/photo-2.png",
-      "/vehicles/hilux-vigo-2009/photo-1.png",
+      "/vehicles/hilux-vigo-2009/ai-front.png",
+      "/vehicles/hilux-vigo-2009/ai-side.png",
+      "/vehicles/hilux-vigo-2009/ai-rear.png",
     ],
     available: true,
     description:
