@@ -88,7 +88,6 @@ export const defaultVehicles: Vehicle[] = [
     images: [
       "/vehicles/hilux-vigo-2009/ai-front.png",
       "/vehicles/hilux-vigo-2009/ai-side.png",
-      "/vehicles/hilux-vigo-2009/ai-rear.png",
     ],
     available: true,
     description:
