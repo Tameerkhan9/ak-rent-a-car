@@ -6,9 +6,10 @@ import { getApprovedReviews, getVehicles } from "@/lib/data";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Reviews — AK Rent A Car & Tourism Company",
+  title: "Reviews",
   description:
-    "Read customer reviews and leave feedback after returning your rental car in Batkhela.",
+    "Customer reviews for AK Rent A Car in Batkhela. Read real feedback and leave a review after your rental.",
+  alternates: { canonical: "/reviews" },
 };
 
 export default async function ReviewsPage() {

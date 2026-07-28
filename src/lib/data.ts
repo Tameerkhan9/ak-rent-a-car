@@ -137,6 +137,7 @@ export const defaultVehicles: Vehicle[] = [
     description:
       "2016 white Honda Civic — clean, comfortable, and ready for daily rental use.",
   },
+  // Budget / older cars — always listed after the main fleet
   {
     id: "v10",
     name: "Grande",
@@ -203,6 +204,19 @@ export const defaultVehicles: Vehicle[] = [
   },
 ];
 
+/** Stable public fleet order (Mongo may return cars in any order). */
+const FLEET_DISPLAY_ORDER = defaultVehicles.map((v) => v.id);
+
+function sortVehiclesForDisplay(vehicles: Vehicle[]): Vehicle[] {
+  const rank = new Map(FLEET_DISPLAY_ORDER.map((id, i) => [id, i]));
+  return [...vehicles].sort((a, b) => {
+    const ra = rank.get(a.id) ?? Number.MAX_SAFE_INTEGER;
+    const rb = rank.get(b.id) ?? Number.MAX_SAFE_INTEGER;
+    if (ra !== rb) return ra - rb;
+    return a.name.localeCompare(b.name);
+  });
+}
+
 /* ---------------- JSON fallback (local without Atlas) ---------------- */
 
 async function ensureDataFiles() {
@@ -249,18 +263,20 @@ async function ensureVehiclesSeeded() {
 
 export async function getVehicles(): Promise<Vehicle[]> {
   if (!hasMongoUri()) {
-    return readJson<Vehicle[]>(vehiclesPath, defaultVehicles);
+    const vehicles = await readJson<Vehicle[]>(vehiclesPath, defaultVehicles);
+    return sortVehiclesForDisplay(vehicles);
   }
   try {
     await ensureVehiclesSeeded();
     const db = await getDb();
-    return db
+    const vehicles = await db
       .collection<Vehicle>("vehicles")
       .find({}, { projection: { _id: 0 } })
       .toArray();
+    return sortVehiclesForDisplay(vehicles);
   } catch (error) {
     console.error("MongoDB getVehicles failed, using defaults:", error);
-    return defaultVehicles;
+    return sortVehiclesForDisplay(defaultVehicles);
   }
 }
 

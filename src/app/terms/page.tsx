@@ -8,9 +8,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions — AK Rent A Car & Tourism Company",
+  title: "Terms & Conditions",
   description:
-    "Full rental terms and conditions for taking a car on contract from AK Rent A Car in Batkhela.",
+    "Rental terms for taking a car on contract from AK Rent A Car in Batkhela — ID, licence, deposit, and return rules.",
+  alternates: { canonical: "/terms" },
 };
 
 const terms = [

@@ -36,3 +36,7 @@ services:
         sync: false
       - key: ADMIN_SECRET
         sync: false
+      - key: SITE_URL
+        value: https://akrentacar.com
+      - key: NEXT_PUBLIC_SITE_URL
+        value: https://akrentacar.com

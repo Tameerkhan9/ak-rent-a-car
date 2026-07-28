@@ -30,6 +30,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -37,6 +38,7 @@ body {
   background: var(--ink);
   color: var(--fog);
   font-family: var(--font-manrope), sans-serif;
+  overflow-x: hidden;
 }
 
 a {

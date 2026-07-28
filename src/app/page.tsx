@@ -28,39 +28,39 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/75 to-ink/25" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-ink/40" />
 
-        <div className="relative mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-6 pb-24 pt-28 sm:pb-28">
-          <div className="animate-rise flex flex-wrap items-center gap-4 sm:gap-6">
+        <div className="relative mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-4 pb-20 pt-24 sm:px-6 sm:pb-28 sm:pt-28">
+          <div className="animate-rise flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-6">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo-ak.png?v=3"
               alt="AK"
-              className="-mt-3 h-28 w-auto object-contain sm:-mt-4 sm:h-36 md:h-44"
+              className="h-20 w-auto object-contain sm:-mt-4 sm:h-36 md:h-44"
             />
             <div>
-              <p className="font-[family-name:var(--font-syne)] text-2xl font-extrabold leading-tight tracking-wide text-white sm:text-4xl md:text-5xl">
+              <h1 className="font-[family-name:var(--font-syne)] text-3xl font-extrabold leading-tight tracking-wide text-white sm:text-4xl md:text-5xl">
                 Rent A Car
                 <br />
                 &amp; Tourism Company
-              </p>
+              </h1>
             </div>
           </div>
           <p className="animate-rise-delay mt-5 max-w-lg text-base text-copper sm:text-lg">
             Your trusted place for safe travel and reliable car rental
           </p>
-          <p className="animate-rise-delay-2 mt-3 max-w-md text-fog/85">
+          <p className="animate-rise-delay-2 mt-3 max-w-md text-sm text-fog/85 sm:text-base">
             Book online in Batkhela — near Waseem Medical Complex, opposite
             Shesho Masjid. Clear rates, honest service, cars you can count on.
           </p>
-          <div className="animate-rise-delay-2 mt-8 flex flex-wrap gap-4">
+          <div className="animate-rise-delay-2 mt-8 flex flex-wrap gap-3 sm:gap-4">
             <Link
               href="/fleet"
-              className="bg-copper px-7 py-3 font-semibold text-ink transition hover:bg-copper-bright"
+              className="bg-copper px-5 py-3 text-sm font-semibold text-ink transition hover:bg-copper-bright sm:px-7 sm:text-base"
             >
               Browse fleet
             </Link>
             <Link
               href="/fleet"
-              className="border border-white/25 px-7 py-3 font-semibold text-white transition hover:border-copper/60"
+              className="border border-white/25 px-5 py-3 text-sm font-semibold text-white transition hover:border-copper/60 sm:px-7 sm:text-base"
             >
               Reserve a car
             </Link>
@@ -68,9 +68,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 py-24">
-        <div className="mb-12 max-w-xl">
-          <h2 className="font-[family-name:var(--font-syne)] text-4xl font-bold text-white sm:text-5xl">
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+        <div className="mb-10 max-w-xl sm:mb-12">
+          <h2 className="font-[family-name:var(--font-syne)] text-3xl font-bold text-white sm:text-5xl">
             Choose your drive
           </h2>
           <p className="mt-3 text-steel">

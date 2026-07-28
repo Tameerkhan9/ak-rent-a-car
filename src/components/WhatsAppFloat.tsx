@@ -17,9 +17,9 @@ export function WhatsAppFloat() {
   );
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-4 right-4 z-50 flex max-w-[calc(100vw-2rem)] flex-col items-end gap-3 sm:bottom-5 sm:right-5">
       {open && (
-        <div className="w-72 border border-white/10 bg-ink-soft p-3 shadow-2xl animate-rise">
+        <div className="w-[min(18rem,calc(100vw-2rem))] border border-white/10 bg-ink-soft p-3 shadow-2xl animate-rise">
           <p className="mb-2 px-1 text-xs uppercase tracking-[0.2em] text-copper">
             Chat on WhatsApp
           </p>

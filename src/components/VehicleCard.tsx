@@ -19,19 +19,19 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
             </span>
           )}
         </div>
-        <div className="flex items-start justify-between gap-4">
-          <div>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+          <div className="min-w-0">
             <p className="text-xs uppercase tracking-[0.2em] text-copper">
               {vehicle.year} · {vehicle.color}
             </p>
-            <h3 className="mt-1 font-[family-name:var(--font-syne)] text-2xl font-bold text-white">
+            <h3 className="mt-1 font-[family-name:var(--font-syne)] text-xl font-bold text-white sm:text-2xl">
               {vehicle.brand} {vehicle.name}
             </h3>
             <p className="mt-2 max-w-md text-sm text-steel">
               {vehicle.seats} seats · {vehicle.transmission} · {vehicle.fuel}
             </p>
           </div>
-          <div className="text-right">
+          <div className="shrink-0 text-left sm:text-right">
             <p className="font-[family-name:var(--font-syne)] text-xl font-bold text-white sm:text-2xl">
               {formatPKR(vehicle.pricePerDay)}
             </p>

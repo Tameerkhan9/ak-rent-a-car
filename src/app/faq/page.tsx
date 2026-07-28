@@ -3,9 +3,10 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "FAQ — AK Rent A Car & Tourism Company",
+  title: "FAQ",
   description:
-    "Frequently asked questions about car rental and tourism with AK Rent A Car in Batkhela.",
+    "FAQ for renting a car in Batkhela with AK Rent A Car — rates, pickup, tourism trips across Pakistan, and booking help.",
+  alternates: { canonical: "/faq" },
 };
 
 export default function FaqPage() {
