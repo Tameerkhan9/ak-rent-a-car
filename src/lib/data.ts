@@ -143,16 +143,16 @@ export const defaultVehicles: Vehicle[] = [
     name: "Grande",
     brand: "Toyota",
     year: 2016,
-    color: "White",
+    color: "Gun Metallic",
     category: "sedan",
     seats: 5,
     transmission: "automatic",
     fuel: "Petrol",
-    pricePerDay: 9000,
+    pricePerDay: 9500,
     image: "/vehicles/grande-2016.png",
     available: true,
     description:
-      "2016 Toyota Corolla Grande — premium sedan comfort for business and family travel.",
+      "2016 gun metallic Toyota Corolla Grande — Rs 9,500 per day. Premium sedan comfort for business and family travel.",
   },
   {
     id: "v3",
@@ -256,6 +256,23 @@ async function ensureVehiclesSeeded() {
   const count = await db.collection("vehicles").countDocuments();
   if (count === 0) {
     await db.collection("vehicles").insertMany(defaultVehicles);
+    return;
+  }
+
+  // Apply Grande catalog update (color + daily rate)
+  const grande = defaultVehicles.find((v) => v.id === "v10");
+  if (grande) {
+    await db.collection("vehicles").updateOne(
+      { id: "v10" },
+      {
+        $set: {
+          color: grande.color,
+          pricePerDay: grande.pricePerDay,
+          description: grande.description,
+        },
+      },
+      { upsert: true }
+    );
   }
 }
 
