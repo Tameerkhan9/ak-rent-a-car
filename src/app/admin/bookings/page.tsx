@@ -10,7 +10,7 @@ export default async function BookingsPage() {
   return (
     <AdminShell
       title="Bookings"
-      subtitle="Review every reservation and update its status."
+      subtitle="Review every reservation, update its status, or delete it."
     >
       {bookings.length === 0 ? (
         <div className="border border-dashed border-white/15 px-6 py-16 text-center text-steel">

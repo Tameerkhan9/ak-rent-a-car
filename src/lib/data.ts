@@ -415,6 +415,20 @@ export async function updateBookingStatus(
   return result;
 }
 
+export async function deleteBooking(id: string): Promise<void> {
+  if (!hasMongoUri()) {
+    const bookings = await getBookings();
+    const next = bookings.filter((b) => b.id !== id);
+    if (next.length === bookings.length) throw new Error("Booking not found");
+    await writeJson(bookingsPath, next);
+    return;
+  }
+
+  const db = await getDb();
+  const result = await db.collection("bookings").deleteOne({ id });
+  if (result.deletedCount === 0) throw new Error("Booking not found");
+}
+
 export function calcDays(pickupDate: string, returnDate: string): number {
   const start = new Date(pickupDate);
   const end = new Date(returnDate);

@@ -28,6 +28,16 @@ export function BookingActions({
     router.refresh();
   }
 
+  async function remove() {
+    if (!confirm("Delete this booking permanently?")) return;
+    const res = await fetch(`/api/bookings/${id}`, { method: "DELETE" });
+    if (!res.ok) {
+      alert("Could not delete booking. Please try again.");
+      return;
+    }
+    router.refresh();
+  }
+
   return (
     <div className="mt-5 flex flex-wrap gap-2">
       {statuses.map((s) => (
@@ -45,6 +55,13 @@ export function BookingActions({
           {s}
         </button>
       ))}
+      <button
+        type="button"
+        onClick={remove}
+        className="border border-red-400/30 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-red-300 transition hover:border-red-300/60"
+      >
+        Delete
+      </button>
     </div>
   );
 }

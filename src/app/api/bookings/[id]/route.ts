@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { updateBookingStatus } from "@/lib/data";
+import { deleteBooking, updateBookingStatus } from "@/lib/data";
 import { isAuthenticated } from "@/lib/auth";
 import type { BookingStatus } from "@/lib/types";
 
@@ -15,4 +15,21 @@ export async function PATCH(
   const status = body.status as BookingStatus;
   const booking = await updateBookingStatus(id, status);
   return NextResponse.json(booking);
+}
+
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  if (!(await isAuthenticated())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id } = await params;
+  try {
+    await deleteBooking(id);
+    return NextResponse.json({ ok: true });
+  } catch {
+    return NextResponse.json({ error: "Booking not found" }, { status: 404 });
+  }
 }
