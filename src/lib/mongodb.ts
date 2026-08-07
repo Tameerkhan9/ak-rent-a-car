@@ -32,8 +32,9 @@ function getClientPromise() {
 
   if (!global._mongoClientPromise) {
     const client = new MongoClient(uri, {
-      serverSelectionTimeoutMS: 10000,
-      connectTimeoutMS: 10000,
+      // Fail fast so a bad password can't hang Render health checks / page loads
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 5000,
       family: 4,
     });
     global._mongoClientPromise = client.connect().catch((error) => {
