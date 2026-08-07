@@ -452,8 +452,9 @@ export function toPublicReview(review: Review): PublicReview {
 
 export async function getApprovedReviews(): Promise<PublicReview[]> {
   const reviews = await getReviews();
+  // Live immediately for customers — only rejected reviews stay hidden
   return reviews
-    .filter((r) => r.status === "approved")
+    .filter((r) => r.status !== "rejected")
     .map(toPublicReview);
 }
 

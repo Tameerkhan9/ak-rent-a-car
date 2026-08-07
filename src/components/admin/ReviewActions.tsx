@@ -3,8 +3,6 @@
 import { useRouter } from "next/navigation";
 import type { ReviewStatus } from "@/lib/types";
 
-const statuses: ReviewStatus[] = ["pending", "approved", "rejected"];
-
 export function ReviewActions({
   id,
   status,
@@ -13,8 +11,9 @@ export function ReviewActions({
   status: ReviewStatus;
 }) {
   const router = useRouter();
+  const hidden = status === "rejected";
 
-  async function update(next: ReviewStatus) {
+  async function setStatus(next: ReviewStatus) {
     await fetch(`/api/reviews/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -31,21 +30,23 @@ export function ReviewActions({
 
   return (
     <div className="mt-5 flex flex-wrap gap-2">
-      {statuses.map((s) => (
+      {hidden ? (
         <button
-          key={s}
           type="button"
-          onClick={() => update(s)}
-          disabled={s === status}
-          className={`px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition ${
-            s === status
-              ? "bg-copper text-ink"
-              : "border border-white/15 text-fog/80 hover:border-copper/50 hover:text-copper"
-          }`}
+          onClick={() => setStatus("approved")}
+          className="bg-copper px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink transition hover:bg-copper-bright"
         >
-          {s}
+          Show on website
         </button>
-      ))}
+      ) : (
+        <button
+          type="button"
+          onClick={() => setStatus("rejected")}
+          className="border border-white/15 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-fog/80 transition hover:border-copper/50 hover:text-copper"
+        >
+          Hide from website
+        </button>
+      )}
       <button
         type="button"
         onClick={remove}

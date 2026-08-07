@@ -11,20 +11,18 @@ const badge: Record<ReviewStatus, string> = {
 
 export default async function AdminReviewsPage() {
   const reviews = await getReviews();
-  const pending = reviews.filter((r) => r.status === "pending").length;
+  const live = reviews.filter((r) => r.status !== "rejected").length;
 
   return (
     <AdminShell
       title="Reviews"
-      subtitle="Full customer details stay here. The website only shows name and review."
+      subtitle="Customer reviews go live automatically. Phone numbers stay here only."
     >
       <p className="mb-6 text-sm text-steel">
-        {pending > 0
-          ? `${pending} review${pending === 1 ? "" : "s"} marked pending.`
-          : "New reviews go live for customers automatically."}{" "}
-        Tip: mark a booking as <span className="text-fog">completed</span> after
-        the car is returned so the customer can submit a review. Use Reject to
-        hide a review from the site.
+        {live} review{live === 1 ? "" : "s"} visible on the website. No
+        approval needed — customers publish directly. Tip: mark a booking as{" "}
+        <span className="text-fog">completed</span> after the car is returned so
+        they can submit. Use Hide if you need to remove one from the site.
       </p>
 
       {reviews.length === 0 ? (
